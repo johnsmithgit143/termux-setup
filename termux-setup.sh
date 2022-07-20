@@ -24,12 +24,12 @@ getuserandhost()
 
 cmdmsg()
 {
-	echo "$2... [ ${yellow}PENDING${nocolor} ]"
+	echo "$2... [ PENDING ]"
 	if $1 >/dev/null
 	then
-		echo "$2... [ ${green}OK${nocolor} ]"
+		echo "$2... [ OK ]"
 	else
-		echo "$2... [ ${red}${whitebg}ERROR${nocolor} ]"
+		echo "$2... [ ERROR ]"
 		exit 1
 	fi
 }
@@ -79,14 +79,14 @@ cmdmsg "zpluginsdl" "Downloading zsh plugins"
 
 cmdmsg "chsh -s zsh" "Changing shell to zsh"
 
-echo "Removing start up message... [ ${yellow}PENDING${nocolor} ]"
+echo "Removing start up message... [ PENDING ]"
 [ -f $HOME/../usr/etc/motd ] && rm $HOME/../usr/etc/motd
-echo "Removing start up message... [ ${green}OK${nocolor} ]"
+echo "Removing start up message... [ OK ]"
 
 cmdmsg dotfilesdl "Installing dotfiles"
 
 cmdmsg finalize "Finishing up"
-echo "All Done! Please restart Termux"
+echo "All Done! Please restart Termux by typing exit and opening Termux again"
 
 
 
