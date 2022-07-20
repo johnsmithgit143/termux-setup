@@ -33,6 +33,8 @@ cd() { builtin cd $@ && ls ; }
 cx() { file1=$1 ; file2=${file1%%.*} ; cat ~/storage/shared/Acode/$file1 > $file1 && clang -o $file2 $file1 && chmod +x $file2 && shift && ./$file2 $@ ; }
 sx() { file=$1 ; cat ~/storage/shared/Acode/$file > $file && chmod +x $file && shift && ./$file $@ ; }
 lsc() { ls ~/storage/shared/Acode ; }
+mvc() { mv ~/storage/shared/Acode/$@ . ; }
+mva() { mv $@ ~/storage/shared/Acode/ ; }
 
 source /data/data/com.termux/files/usr/etc/zplugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /data/data/com.termux/files/usr/etc/zplugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
