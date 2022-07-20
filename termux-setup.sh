@@ -25,7 +25,7 @@ getuserandhost()
 cmdmsg()
 {
 	echo "$2... [ PENDING ]"
-	if $1 >/dev/null
+	if $1 >/dev/null 2>&1
 	then
 		echo "$2... [ OK ]"
 	else
@@ -46,14 +46,14 @@ zpluginsdl()
 dotfilesdl()
 {
 	[ -f $HOME/../usr/etc/zshrc ] && rm $HOME/../usr/etc/zshrc
-	cp $scriptd/dotfiles/zsh/zshrc $HOME/../usr/etc/
-	sed -i -e "s/jack/$username/g" $HOME/../usr/etc/zshrc
-	sed -i -e "s/android/$hostname/g" $HOME/../usr/etc/zshrc
+	cp $scriptd/dotfiles/zsh/zshrc $HOME/../usr/etc/ || return 1
+	sed -i -e "s/jack/$username/g" $HOME/../usr/etc/zshrc || return 1
+	sed -i -e "s/android/$hostname/g" $HOME/../usr/etc/zshrc || return 1
 	mkdir -p $HOME/.config/neofetch/
 	[ -f $HOME/.config/neofetch/config.conf ] && rm $HOME/.config/neofetch/config.conf
-	cp $scriptd/dotfiles/neofetch/config.conf $HOME/.config/neofetch/
-	sed -i -e "s/jack/$username/g" $HOME/.config/neofetch/config.conf
-	sed -i -e "s/android/$hostname/g" $HOME/.config/neofetch/config.conf
+	cp $scriptd/dotfiles/neofetch/config.conf $HOME/.config/neofetch/ || return 1
+	sed -i -e "s/jack/$username/g" $HOME/.config/neofetch/config.conf || return 1
+	sed -i -e "s/android/$hostname/g" $HOME/.config/neofetch/config.conf || return 1
 	echo "color12=#6495ed" > $HOME/.termux/colors.properties
 }
 
@@ -62,7 +62,14 @@ finalize()
 	termux-reload-settings
 }
 
-cmdmsg "termux-setup-storage" "Setting up storage"
+echo "Setting up storage... [ PENDING ]"
+if termux-setup-storage
+then
+	echo "Setting up storage... [ OK ]"
+else
+	echo "Setting up storage... [ ERROR ]"
+	exit 1
+fi
 
 cmdmsg "ping -c 1 google.com" "Checking if you have an internet connection"
 
@@ -86,10 +93,4 @@ echo "Removing start up message... [ OK ]"
 cmdmsg dotfilesdl "Installing dotfiles"
 
 cmdmsg finalize "Finishing up"
-echo "All Done! Please restart Termux by typing exit and opening Termux again"
-
-
-
-
-
-
+echo "All Done! Please restart Termux by typing exit and opening Termux again."
