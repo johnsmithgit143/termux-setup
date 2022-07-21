@@ -1,4 +1,4 @@
-pkgs="git man zsh zsh-completions neofetch neovim"
+pkgs="git man zsh zsh-completions neofetch neovim openssh"
 zplugins="https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting"
 dotfilesrepod="https://raw.githubusercontent.com/johnsmithgit143/termux-dotfiles/main/dotfiles"
 dotfileschosen="neofetch/config.conf:$HOME/.config/neofetch/config.conf zsh/zshrc:$HOME/../usr/etc/zshrc"
@@ -33,6 +33,13 @@ cmdmsg()
 	if [ "$3" = "unhide" ]
 	then
 		$1 && returncode=0 || returncode=1
+	elif [ "$3" = "unhiderr" ]
+	then
+		$1 >/dev/null && returncode=0 || returncode=1
+	elif [ "$3" = "true" ]
+	then
+		$1 >/dev/null 2>&1
+		returncode=0 
 	else
 		$1 >/dev/null 2>&1 && returncode=0 || returncode=1
 	fi
@@ -56,7 +63,7 @@ checkpkgs()
 
 zpluginsdl()
 {
-	[ -d $HOME/../usr/etc/zplugins ] || mkdir $HOME/../usr/etc/zplugins
+	mkdir -p $HOME/../usr/etc/zplugins
 	for i in $zplugins
 	do 
 		[ -d $HOME/../usr/etc/zplugins/${i##*/} ] || git clone $i $HOME/../usr/etc/zplugins/${i##*/} || return 1
@@ -73,40 +80,36 @@ dotfilesinstall()
 		sed -i -e "s/replaceusername/$username/g" ${i##*:} || return 1
 		sed -i -e "s/replacehostname/$hostname/g" ${i##*:} || return 1
 	done
+	
+	echo "color12=#0092ff" > $HOME/.termux/colors.properties || return 1
+	
 }
 
-reloadsettings()
-{
-	termux-reload-settings || return 1
-}
-
-cmdmsg "ping -c 1 google.com" "Checking if you have an internet connection"
+cmdmsg "ping -c 1 google.com" "Checking your net connection"
 
 cmdmsg getuserandhost "Getting user information" unhide
 
 cmdmsg termux-setup-storage "Setting up storage" unhide
 
-read -p "Script will delete all your previous configs. The rest requires no user input. Do you proceed? [y/n]: " confirmation
+read -p "Script will replace your dotfiles. Continue? [y/n]: " confirmation
 [ "$confirmation" = "y" ] || exit 1
 
-cmdmsg "pkg upgrade --yes" "Updating existing packages"
+cmdmsg "pkg upgrade -y" "Updating existing packages" unhide
 
-cmdmsg "pkg install --yes $pkgs" "Installing required packages"
+cmdmsg "pkg install -y $pkgs" "Installing required packages" unhide
 
-cmdmsg checkpkgs "Checking if packages downloaded successfully"
+cmdmsg checkpkgs "Checking if succesfully downloaded"
 
-cmdmsg zpluginsdl "Downloading zsh plugins"
+cmdmsg zpluginsdl "Downloading zsh plugins" unhide
 
 cmdmsg "chsh -s zsh" "Changing shell to zsh"
 
-[ -f $HOME/../usr/etc/motd* ] && cmdmsg "rm $HOME/../usr/etc/motd*" "Removing startup message" 
+cmdmsg "rm $HOME/../usr/etc/motd*" "Removing startup message" true
 
-cmdmsg dotfilesinstall "Installing dotfiles" 
+cmdmsg dotfilesinstall "Installing dotfiles" unhide
 
-cmdmsg reloadsettings "Reloading settings"
+cmdmsg termux-reload-settings "Reloading settings"
 
-echo "All done! No errors occured. Thank you for using my setup script. Will clean up in 5 seconds..."
-
-sleep 5
-clear
-zsh
+echo "All done! No errors occured."
+echo "Thank you for using my setup script."
+echo "Open a new session to see the changes."
