@@ -1,8 +1,8 @@
 # termux-setup
 Shell script to setup Termux
 # install
-git clone https://github.com/johnsmithgit143/termux-setup
-cd termux-setup
-./termux-setup.sh
-# not working right now
-i am reworking it sorry
+curl https://raw.githubusercontent.com/johnsmithgit143/termux-setup/main/termux-setup.sh -o termux-setup.sh && chmod +x termux-setup.sh && ./termux-setup.sh
+# working right now
+i am done reworking it
+# pkg returns 0 on error
+this is such a pain to deal with. try pkg upgrade and pkg update while net turned off

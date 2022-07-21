@@ -1,5 +1,7 @@
-pkgs="git man zsh zsh-completions neofetch"
+pkgs="git man zsh zsh-completions neofetch neovim"
 zplugins="https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting"
+dotfilesrepod="https://raw.githubusercontent.com/johnsmithgit143/termux-dotfiles/main/dotfiles"
+dotfileschosen="neofetch/config.conf:$HOME/.config/neofetch/config.conf zsh/zshrc:$HOME/../usr/etc/zshrc"
 scriptd=$(dirname $(readlink -f "$0"))
 
 nocolor='\033[0m'
@@ -26,16 +28,11 @@ getuserandhost()
 
 cmdmsg()
 {
-	unset returncode
 	echo -e "$2... [ ${byellow}PENDING${nocolor} ]"
 	
 	if [ "$3" = "unhide" ]
 	then
 		$1 && returncode=0 || returncode=1
-	elif [ "$3" = "true" ]
-	then
-		$1
-		returncode=0
 	else
 		$1 >/dev/null 2>&1 && returncode=0 || returncode=1
 	fi
@@ -49,6 +46,14 @@ cmdmsg()
 	fi
 }
 
+checkpkgs()
+{
+	for i in $pkgs
+	do
+		pkg list-installed | grep $i || return 1
+	done
+}
+
 zpluginsdl()
 {
 	[ -d $HOME/../usr/etc/zplugins ] || mkdir $HOME/../usr/etc/zplugins
@@ -60,24 +65,19 @@ zpluginsdl()
 
 dotfilesinstall()
 {
-	echo "i am reworking this"
-	exit 1
-	[ -f $HOME/../usr/etc/zshrc ] && rm $HOME/../usr/etc/zshrc
-	cp $scriptd/dotfiles/zsh/zshrc $HOME/../usr/etc/ || return 1
-	sed -i -e "s/jack/$username/g" $HOME/../usr/etc/zshrc || return 1
-	sed -i -e "s/android/$hostname/g" $HOME/../usr/etc/zshrc || return 1
-	mkdir -p $HOME/.config/neofetch/
-	[ -f $HOME/.config/neofetch/config.conf ] && rm $HOME/.config/neofetch/config.conf
-	cp $scriptd/dotfiles/neofetch/config.conf $HOME/.config/neofetch/ || return 1
-	sed -i -e "s/jack/$username/g" $HOME/.config/neofetch/config.conf || return 1
-	sed -i -e "s/android/$hostname/g" $HOME/.config/neofetch/config.conf || return 1
-	echo "color12=#6495ed" > $HOME/.termux/colors.properties
+	for i in $dotfileschosen
+	do
+		output=${i##*:}
+		mkdir -p ${output%/*}
+		curl $dotfilesrepod/${i%%:*} -o $output || return 1
+		sed -i -e "s/replaceusername/$username/g" ${i##*:} || return 1
+		sed -i -e "s/replacehostname/$hostname/g" ${i##*:} || return 1
+	done
 }
 
-
-finalize()
+reloadsettings()
 {
-	termux-reload-settings
+	termux-reload-settings || return 1
 }
 
 cmdmsg "ping -c 1 google.com" "Checking if you have an internet connection"
@@ -89,17 +89,24 @@ cmdmsg termux-setup-storage "Setting up storage" unhide
 read -p "Script will delete all your previous configs. The rest requires no user input. Do you proceed? [y/n]: " confirmation
 [ "$confirmation" = "y" ] || exit 1
 
-cmdmsg "pkg upgrade --yes" "Updating every package"
+cmdmsg "pkg upgrade --yes" "Updating existing packages"
 
 cmdmsg "pkg install --yes $pkgs" "Installing required packages"
 
-cmdmsg "zpluginsdl" "Downloading zsh plugins"
+cmdmsg checkpkgs "Checking if packages downloaded successfully"
+
+cmdmsg zpluginsdl "Downloading zsh plugins"
 
 cmdmsg "chsh -s zsh" "Changing shell to zsh"
 
-[ -f $HOME/../usr/etc/motd ] && cmdmsg "rm $HOME/../usr/etc/motd" "Removing startup message" 
+[ -f $HOME/../usr/etc/motd* ] && cmdmsg "rm $HOME/../usr/etc/motd*" "Removing startup message" 
 
-cmdmsg dotfilesinstall "Installing dotfiles" unhide
+cmdmsg dotfilesinstall "Installing dotfiles" 
 
-cmdmsg finalize "Finishing up"
-echo "All Done! Please restart Termux by typing exit and opening Termux again."
+cmdmsg reloadsettings "Reloading settings"
+
+echo "All done! No errors occured. Thank you for using my setup script. Will clean up in 5 seconds..."
+
+sleep 5
+clear
+zsh
