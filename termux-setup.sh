@@ -1,7 +1,7 @@
-pkgs="git man zsh zsh-completions neofetch neovim openssh"
+pkgs="git man zsh zsh-completions neofetch neovim openssh clang"
 zplugins="https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting"
 dotfilesrepod="https://raw.githubusercontent.com/johnsmithgit143/termux-dotfiles/main/dotfiles"
-dotfileschosen="neofetch/config.conf:$HOME/.config/neofetch/config.conf zsh/zshrc:$HOME/../usr/etc/zshrc"
+dotfileschosen="neofetch/config.conf:$HOME/.config/neofetch/config.conf zsh/zshrc:$PREFIX/etc/zshrc"
 scriptd=$(dirname $(readlink -f "$0"))
 
 nocolor='\033[0m'
@@ -63,10 +63,10 @@ checkpkgs()
 
 zpluginsdl()
 {
-	mkdir -p $HOME/../usr/etc/zplugins
+	mkdir -p $PREFIX/etc/zplugins
 	for i in $zplugins
 	do 
-		[ -d $HOME/../usr/etc/zplugins/${i##*/} ] || git clone $i $HOME/../usr/etc/zplugins/${i##*/} || return 1
+		[ -d $PREFIX/etc/zplugins/${i##*/} ] || git clone $i $PREFIX/etc/zplugins/${i##*/} || return 1
 	done
 }
 
@@ -104,7 +104,7 @@ cmdmsg zpluginsdl "Downloading zsh plugins" unhide
 
 cmdmsg "chsh -s zsh" "Changing shell to zsh"
 
-cmdmsg "rm $HOME/../usr/etc/motd*" "Removing startup message" true
+cmdmsg "rm $PREFIX/etc/motd*" "Removing startup message" true
 
 cmdmsg dotfilesinstall "Installing dotfiles" unhide
 

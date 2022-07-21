@@ -17,4 +17,4 @@ See [here.](https://github.com/johnsmithgit143/termux-dotfiles)
 
 # Goals
 ---
-I try to add comments soon.
+I try to add more stuff soon.
