@@ -1,10 +1,20 @@
-# termux-setup
-Shell script to setup Termux
-# install
-curl https://raw.githubusercontent.com/johnsmithgit143/termux-setup/main/termux-setup.sh -o termux-setup.sh && chmod +x termux-setup.sh && ./termux-setup.sh
-# working right now
-i am done reworking it
-# pkg returns 0 on error
-this is such a pain to deal with. try pkg upgrade and pkg update while net turned off
-# I am reworking this now
-Pkg and apt is not trustworthy 
+# Execute Script
+---
+Copy this line and hit enter on the Termux terminal.
+
+`curl https://raw.githubusercontent.com/johnsmithgit143/termux-setup/main/termux-setup.sh -o termux-setup.sh && chmod +x termux-setup.sh && ./termux-setup.sh`
+
+# Termux?
+---
+Install [here.](https://f-droid.org/en/packages/com.termux/)
+
+There are add-ons like [Termux:Styling.](https://f-droid.org/en/packages/com.termux.styling)
+Search "Termux" in the F-Droid search bar for more add-ons.
+
+# Dotfiles
+---
+See [here.](https://github.com/johnsmithgit143/termux-dotfiles)
+
+# Goals
+---
+I try to add comments soon.
