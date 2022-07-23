@@ -1,8 +1,7 @@
 pkgs="git man zsh zsh-completions neofetch neovim openssh clang"
 zplugins="https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting"
-dotfilesrepod="https://raw.githubusercontent.com/johnsmithgit143/termux-dotfiles/main/dotfiles"
+dotfilesrepodir="https://raw.githubusercontent.com/johnsmithgit143/termux-dotfiles/main/dotfiles"
 dotfileschosen="neofetch/config.conf:$HOME/.config/neofetch/config.conf zsh/zshrc:$PREFIX/etc/zshrc"
-scriptd=$(dirname $(readlink -f "$0"))
 
 nocolor='\033[0m'
 bred='\033[1;31m'
@@ -66,7 +65,7 @@ zpluginsdl()
 	mkdir -p $PREFIX/etc/zplugins
 	for i in $zplugins
 	do 
-		[ -d $PREFIX/etc/zplugins/${i##*/} ] || git clone $i $PREFIX/etc/zplugins/${i##*/} || return 1
+		[ -d $PREFIX/etc/zplugins/${i##*/} ] && cd $PREFIX/etc/zplugins/${i##*/} && git pull || git clone $i $PREFIX/etc/zplugins/${i##*/} || return 1
 	done
 }
 
@@ -76,7 +75,7 @@ dotfilesinstall()
 	do
 		output=${i##*:}
 		mkdir -p ${output%/*}
-		curl $dotfilesrepod/${i%%:*} -o $output || return 1
+		curl $dotfilesrepodir/${i%%:*} -o $output || return 1
 		sed -i -e "s/replaceusername/$username/g" ${i##*:} || return 1
 		sed -i -e "s/replacehostname/$hostname/g" ${i##*:} || return 1
 	done
