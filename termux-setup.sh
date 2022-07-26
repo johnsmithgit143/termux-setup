@@ -1,7 +1,8 @@
-pkgs="git man manpages zsh zsh-completions neofetch neovim openssh clang binutils golang tmux"
+pkgs="git man manpages zsh zsh-completions neofetch neovim openssh clang binutils golang tmux openssl-tool"
 zplugins="https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting"
 dotfilesrepodir="https://raw.githubusercontent.com/johnsmithgit143/termux-dotfiles/main/dotfiles"
 dotfileschosen="neofetch/config.conf:$HOME/.config/neofetch/config.conf zsh/zshrc:$PREFIX/etc/zshrc"
+termuxloginrepo="https://raw.githubusercontent.com/johnsmithgit143/termux-login/main/termux-login.c"
 
 nocolor='\033[0m'
 bred='\033[1;31m'
@@ -84,6 +85,16 @@ dotfilesinstall()
 	
 }
 
+termuxlogininstall()
+{
+	file1=${termuxloginrepo##*/}
+	file2=${file1%%.*}
+	curl $termuxloginrepo -o $HOME/$file1 || return 1
+	clang -Weverything -o $HOME/$file2 $HOME/$file1 && rm $HOME/$file1 && chmod +x $HOME/$file2 && mv $HOME/$file2 $PREFIX/bin/ || return 1;
+}
+
+echo -e "termux-setup.sh by johnsmithgit143\n"
+
 cmdmsg "ping -c 1 google.com" "Checking your net connection"
 
 cmdmsg getuserandhost "Getting user information" unhide
@@ -106,6 +117,8 @@ cmdmsg "chsh -s zsh" "Changing shell to zsh"
 cmdmsg "rm $PREFIX/etc/motd*" "Removing startup message" true
 
 cmdmsg dotfilesinstall "Installing dotfiles" unhide
+
+cmdmsg termuxlogininstall "Installing termux-login" unhide
 
 cmdmsg termux-reload-settings "Reloading settings"
 
