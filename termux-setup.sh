@@ -1,4 +1,4 @@
-pkgs="git man manpages zsh zsh-completions neofetch neovim openssh clang binutils golang tmux openssl-tool"
+pkgs="git man manpages zsh zsh-completions neofetch neovim openssh clang binutils golang tmux"
 zplugins="https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting"
 dotfilesrepodir="https://raw.githubusercontent.com/johnsmithgit143/termux-dotfiles/main/dotfiles"
 dotfileschosen="neofetch/config.conf:$HOME/.config/neofetch/config.conf zsh/zshrc:$PREFIX/etc/zshrc"
@@ -91,6 +91,7 @@ termuxlogininstall()
 	file2=${file1%%.*}
 	curl $termuxloginrepo -o $HOME/$file1 || return 1
 	clang -Weverything -o $HOME/$file2 $HOME/$file1 && rm $HOME/$file1 && chmod +x $HOME/$file2 && mv $HOME/$file2 $PREFIX/bin/ || return 1;
+	[ -f $PREFIX/etc/termux-login-pwd ] && rm $PREFIX/etc/termux-login-pwd
 }
 
 echo -e "termux-setup.sh by johnsmithgit143\n"
