@@ -90,8 +90,8 @@ termuxlogininstall()
 	file1=${termuxloginrepo##*/}
 	file2=${file1%%.*}
 	curl $termuxloginrepo -o $HOME/$file1 || return 1
-	clang -Weverything -o $HOME/$file2 $HOME/$file1 && rm $HOME/$file1 && chmod +x $HOME/$file2 && mv $HOME/$file2 $PATH || return 1
-	[ -f $PREFIX/etc/termux-login-pwd ] && rm $PREFIX/etc/termux-login-pwd
+	clang -Weverything -o $HOME/$file2 $HOME/$file1 && chmod +x $HOME/$file2 && mv $HOME/$file2 $PATH && rm $HOME/$file1 || return 1
+	rm $PREFIX/etc/termux-login-pwd || return 0
 }
 
 echo -e "termux-setup.sh by johnsmithgit143\n"
