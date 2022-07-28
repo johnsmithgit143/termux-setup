@@ -1,4 +1,4 @@
-pkgs="git man manpages zsh zsh-completions neofetch neovim openssh clang binutils golang tmux fortune"
+pkgs="git man manpages zsh zsh-completions neofetch neovim openssh clang binutils golang tmux fortune cowsay"
 zplugins="https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting"
 dotfilesrepodir="https://raw.githubusercontent.com/johnsmithgit143/termux-dotfiles/main/dotfiles"
 dotfileschosen="neofetch/config.conf:$HOME/.config/neofetch/config.conf zsh/zshrc:$PREFIX/etc/zshrc"
