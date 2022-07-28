@@ -1,7 +1,7 @@
 pkgs="git man manpages zsh zsh-completions neofetch neovim openssh clang binutils golang tmux fortune cowsay"
 zplugins="https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting"
 dotfilesrepodir="https://raw.githubusercontent.com/johnsmithgit143/termux-dotfiles/main/dotfiles"
-dotfileschosen="neofetch/config.conf:$HOME/.config/neofetch/config.conf zsh/zshrc:$PREFIX/etc/zshrc"
+dotfileschosen="neofetch/config.conf:$HOME/.config/neofetch/config.conf zsh/zshrc:$PREFIX/etc/zshrc termux/font.ttf:$HOME/.termux/font.ttf termux/termux.properties:$HOME/.termux/termux.properties zsh/zprofile:$PREFIX/etc/zprofile"
 termuxloginrepo="https://raw.githubusercontent.com/johnsmithgit143/termux-login/main/termux-login.c"
 
 nocolor='\033[0m'
