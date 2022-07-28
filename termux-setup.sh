@@ -1,7 +1,7 @@
 pkgs="git man manpages zsh zsh-completions neofetch neovim openssh clang binutils golang tmux fortune cowsay"
 zplugins="https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting"
 dotfilesrepodir="https://raw.githubusercontent.com/johnsmithgit143/termux-dotfiles/main/dotfiles"
-dotfileschosen="neofetch/config.conf:$HOME/.config/neofetch/config.conf zsh/zshrc:$PREFIX/etc/zshrc termux/font.ttf:$HOME/.termux/font.ttf termux/termux.properties:$HOME/.termux/termux.properties zsh/zprofile:$PREFIX/etc/zprofile"
+dotfileschosen="neofetch/config.conf:$HOME/.config/neofetch/config.conf zsh/zshrc:$PREFIX/etc/zshrc termux/font.ttf:$HOME/.termux/font.ttf termux/termux.properties:$HOME/.termux/termux.properties"
 termuxloginrepo="https://raw.githubusercontent.com/johnsmithgit143/termux-login/main/termux-login.c"
 
 nocolor='\033[0m'
@@ -116,6 +116,8 @@ cmdmsg zpluginsdl "Downloading zsh plugins" unhide
 cmdmsg "chsh -s zsh" "Changing shell to zsh"
 
 cmdmsg "rm $PREFIX/etc/motd*" "Removing startup message" true
+
+cmdmsg "rm $HOME/.bash_history" "Removing bash command history" true
 
 cmdmsg dotfilesinstall "Installing dotfiles" unhide
 
