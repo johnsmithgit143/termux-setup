@@ -22,7 +22,7 @@ getuserandhost()
 		echo -e "Your prompt will look like this:"
 		echo -e "${bred}[${bcyan}$username${byellow}@${bgreen}$hostname${bpurple} exampledirectory${bred}]${nocolor}$ examplecommand"
 		read -p "Is this correct? [y/n]: " repeat
-		[ "$repeat" = "y" ] || unset username hostname repeat
+		[ "$repeat" = "y" ] || unset username hostname
 	done
 }
 
@@ -33,9 +33,6 @@ cmdmsg()
 	if [ "$3" = "unhide" ]
 	then
 		$1 && returncode=0 || returncode=1
-	elif [ "$3" = "unhiderr" ]
-	then
-		$1 >/dev/null && returncode=0 || returncode=1
 	elif [ "$3" = "true" ]
 	then
 		$1 >/dev/null 2>&1
@@ -57,7 +54,7 @@ checkpkgs()
 {
 	for i in $pkgs
 	do
-		pkg list-installed | grep $i || return 1
+		pkg info $i || return 1
 	done
 }
 
@@ -96,6 +93,8 @@ termuxlogininstall()
 
 echo -e "termux-setup.sh by johnsmithgit143\n"
 
+cmdmsg "rm $HOME/.termux/font.ttf" "Removing current font" 
+
 cmdmsg "ping -c 1 google.com" "Checking your net connection"
 
 cmdmsg getuserandhost "Getting user information" unhide
@@ -127,4 +126,9 @@ cmdmsg termux-reload-settings "Reloading settings"
 
 echo "All done! No errors occured."
 echo "Thank you for using my setup script."
-echo "Open a new session to see the changes."
+echo "Opening new shell in 5 seconds."
+unset LOGIN
+cd $HOME
+sleep 5 
+clear
+zsh
