@@ -93,7 +93,7 @@ termuxlogininstall()
 
 echo -e "termux-setup.sh by johnsmithgit143\n"
 
-cmdmsg "rm $HOME/.termux/font.ttf" "Removing current font" 
+cmdmsg "rm $HOME/.termux/font.ttf" "Removing current font" true
 
 cmdmsg "ping -c 1 google.com" "Checking your net connection"
 
